@@ -7,9 +7,9 @@ mod tests {
     use super::*;
     use mockito::Server;
 
-    #[test]
-    fn ping() {
-        let mut server = Server::new();
+    #[tokio::test]
+    async fn ping() {
+        let mut server = Server::new_async().await;
         let mock_ping = server
             .mock("GET", "/fapi/v1/ping")
             .with_header("content-type", "application/json;charset=UTF-8")
@@ -20,7 +20,7 @@ mod tests {
         println!("{}", server.url());
         let general: FuturesGeneral = Binance::new_with_config(None, None, &config);
 
-        let pong = general.ping().unwrap();
+        let pong = general.ping().await.unwrap();
         mock_ping.assert();
 
         assert_eq!(pong, "pong");

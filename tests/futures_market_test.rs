@@ -8,9 +8,9 @@ mod tests {
     use super::*;
     use mockito::{Server, Matcher};
 
-    #[test]
-    fn open_interest_statistics() {
-        let mut server = Server::new();
+    #[tokio::test]
+    async fn open_interest_statistics() {
+        let mut server = Server::new_async().await;
         let mock_open_interest_statistics = server
             .mock("GET", "/futures/data/openInterestHist")
             .with_header("content-type", "application/json;charset=UTF-8")
@@ -23,6 +23,7 @@ mod tests {
 
         let open_interest_hists = market
             .open_interest_statistics("BTCUSDT", "5m", 10, None, None)
+            .await
             .unwrap();
         mock_open_interest_statistics.assert();
 

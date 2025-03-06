@@ -133,7 +133,7 @@ impl<'a> FuturesWebSockets<'a> {
 
     fn connect_wss(&mut self, wss: &str) -> Result<()> {
         let url = Url::parse(wss)?;
-        match connect(url) {
+        match connect(url.as_str()) {
             Ok(answer) => {
                 self.socket = Some(answer);
                 Ok(())
